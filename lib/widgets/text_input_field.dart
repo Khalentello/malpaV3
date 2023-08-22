@@ -31,7 +31,7 @@ class TextInputField extends StatelessWidget {
         keyboardType: textInputType,
         inputFormatters: [
           LengthLimitingTextInputFormatter(textInputLength),
-          if (textInputLength < 100) FilteringTextInputFormatter.digitsOnly,
+          if (textInputLength == 10) FilteringTextInputFormatter.digitsOnly,
         ],
 
         // Propiedades estéticas
