@@ -32,6 +32,7 @@ class _RegisterPageState extends State<RegisterPage> {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: primaryColor,
+          elevation: 5,
           iconTheme: const IconThemeData(color: Colors.black),
           title: const Text(
             'Registro',
@@ -133,7 +134,6 @@ class _RegisterPageState extends State<RegisterPage> {
           onChanged: (value) {
             setState(() {
               _controller.isTyCCheck = value!;
-              debugPrint(_controller.isTyCCheck.toString());
             });
           },
           checkColor: Colors.white,

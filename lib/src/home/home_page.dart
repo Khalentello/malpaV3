@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:malpav3/src/home/home_controller.dart';
@@ -21,9 +19,11 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-      _controller.init(context);
-    });
+    SchedulerBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        _controller.init(context);
+      },
+    );
   }
 
   //// WIDGET PADRE
@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage> {
       width: double.infinity,
       child: ElevatedButton.icon(
         onPressed: () =>
-        {_controller.login(), FocusScope.of(context).unfocus()},
+            {_controller.login(), FocusScope.of(context).unfocus()},
         icon: const Icon(
           Icons.login,
           color: Colors.black,
@@ -160,7 +160,7 @@ class _HomePageState extends State<HomePage> {
       width: double.infinity,
       child: ElevatedButton.icon(
         onPressed: () => {
-          Navigator.pushNamed(context, 'register'),
+          _controller.goRegisterPage(),
           FocusScope.of(context).unfocus(),
         },
         icon: const Icon(

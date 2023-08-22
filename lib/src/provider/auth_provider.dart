@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 class AuthProvider {
   FirebaseAuth? _firebaseAuth;
@@ -25,9 +24,7 @@ class AuthProvider {
       }
     } catch (e) {
       res = "Ha ocurrido un error, revisa tus datos e intenta nuevamente";
-      debugPrint(e.toString());
     }
-    debugPrint(res);
     return res;
   }
 
