@@ -1,9 +1,11 @@
 // ignore_for_file: unused_field
 
 import 'dart:async';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart' as location;
 
 class ReportEventController {
@@ -13,15 +15,14 @@ class ReportEventController {
   final GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
   CameraPosition initialPosition =
       const CameraPosition(target: LatLng(4.5882045, -74.1236818), zoom: 17.0);
-  // ignore: unused_field
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
   Position? _position;
   StreamSubscription<Position>? _positionStream;
   final LocationSettings _locationSettings = const LocationSettings(
       accuracy: LocationAccuracy.best, distanceFilter: 1);
-
   void init(BuildContext context, Function refresh) {
+    WidgetsFlutterBinding.ensureInitialized();
     this.context = context;
     this.refresh = refresh;
     checkGps();
@@ -121,5 +122,14 @@ class ReportEventController {
         updateLocation();
       }
     }
+  }
+
+  Future<void> openCamera() async {
+    Navigator.pushNamed(context!, 'takePicture');
+  }
+
+  // CAPTURAR FOTO
+  Future<void> getImage() async {
+    final ImagePicker imagePicker = ImagePicker();
   }
 }

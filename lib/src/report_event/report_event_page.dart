@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:malpav3/src/report_event/report_event_controller.dart';
+import 'package:malpav3/src/utils/colors_generic.dart';
 import 'package:malpav3/widgets/text_input_field.dart';
 
 class ReportEventPage extends StatefulWidget {
@@ -38,28 +39,38 @@ class _ReportEventPageState extends State<ReportEventPage> {
           ),
         ),
       ),
-      backgroundColor: Colors.grey,
       body: Form(
-        child: Column(
-          children: [
-            Expanded(
-              flex: 2,
-              child: _googleMaps(),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.amber.shade700, Colors.amber.shade200],
             ),
-            Expanded(
-              flex: 2,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 40),
-                child: Column(
-                  children: [
-                    _inputPlacaVehiculo(),
-                    _listInfracciones(),
-                    _btnUpload(),
-                  ],
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                flex: 2,
+                child: _googleMaps(),
+              ),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _inputPlacaVehiculo(),
+                      _listInfracciones(),
+                      _btnTomarFoto(),
+                      _btnUpload(),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -82,6 +93,8 @@ class _ReportEventPageState extends State<ReportEventPage> {
       icon: 4,
       textInputType: TextInputType.emailAddress,
       textInputLength: 6,
+      marginBottom: 10,
+      marginTop: 12,
     );
   }
 
@@ -90,7 +103,7 @@ class _ReportEventPageState extends State<ReportEventPage> {
   Widget _listInfracciones() {
     final ValueNotifier<List<String>> listNotifier =
         ValueNotifier<List<String>>(
-            ["C02:Estacionar el vehículo en lugares prohibidos", "2.", "3."]);
+            ["Infraccion 1.", "Infraccion 2.", "Infraccion 3."]);
     String? infraccionSeleccionada;
 
     return ValueListenableBuilder(
@@ -98,11 +111,12 @@ class _ReportEventPageState extends State<ReportEventPage> {
       builder: (BuildContext context, List<String> list, Widget? child) {
         return Container(
           width: double.infinity,
+          margin: const EdgeInsets.only(bottom: 12),
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.all(
-              Radius.circular(50),
+              Radius.circular(5),
             ),
           ),
           child: FormField<String>(
@@ -143,6 +157,7 @@ class _ReportEventPageState extends State<ReportEventPage> {
   Widget _btnUpload() {
     return SizedBox(
         width: double.infinity,
+        height: 50,
         child: Directionality(
           textDirection: TextDirection.rtl,
           child: ElevatedButton.icon(
@@ -152,18 +167,48 @@ class _ReportEventPageState extends State<ReportEventPage> {
             },
             label: const Text(
               'Subir Reporte',
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: Colors.white),
             ),
             icon: const Icon(
               Icons.upload_file_rounded,
-              color: Colors.black,
+              color: Colors.white,
             ),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.amber.shade700,
-              shadowColor: const Color.fromRGBO(255, 224, 23, 1),
-              elevation: 20,
+              backgroundColor: buttonColor,
+              elevation: 5,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
+          ),
+        ));
+  }
+
+  Widget _btnTomarFoto() {
+    return Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        width: double.infinity,
+        height: 50,
+        child: Directionality(
+          textDirection: TextDirection.rtl,
+          child: ElevatedButton.icon(
+            onPressed: () => {
+              _controller.openCamera(),
+              FocusScope.of(context).unfocus(),
+            },
+            label: const Text(
+              'Tomar Foto',
+              style: TextStyle(color: Colors.white),
+            ),
+            icon: const Icon(
+              Icons.camera_alt,
+              color: Colors.white,
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: buttonColor,
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
               ),
             ),
           ),

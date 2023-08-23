@@ -10,6 +10,8 @@ class TextInputField extends StatelessWidget {
   final int icon;
   final TextInputType textInputType;
   final int textInputLength;
+  final double marginBottom;
+  final double marginTop;
   const TextInputField({
     super.key,
     required this.textEditingController,
@@ -18,12 +20,14 @@ class TextInputField extends StatelessWidget {
     required this.icon,
     required this.textInputType,
     this.textInputLength = 100,
+    required this.marginBottom,
+    required this.marginTop,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: EdgeInsets.only(bottom: marginBottom, top: marginTop),
       // Valor
       child: TextField(
         controller: textEditingController,
@@ -49,7 +53,7 @@ class TextInputField extends StatelessWidget {
           border: const OutlineInputBorder(
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.all(
-              Radius.circular(50.0),
+              Radius.circular(5),
             ),
           ),
         ),
@@ -64,9 +68,9 @@ class IconList {
 }
 
 List<IconList> _iconsList = [
-  IconList(Icons.mark_email_unread),
+  IconList(Icons.email_outlined),
   IconList(Icons.phone_android),
-  IconList(Icons.lock),
+  IconList(Icons.lock_outline_rounded),
   IconList(Icons.person),
   IconList(Icons.car_crash),
 ];

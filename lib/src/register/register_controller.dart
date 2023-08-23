@@ -12,11 +12,16 @@ class RegisterController {
   final TextEditingController repeatPasswordUser = TextEditingController();
   AuthProvider? _authProvider;
   UserProvider? _userProvider;
+  bool isTyCCheck = false;
 
   void init(BuildContext context) {
     this.context = context;
     _authProvider = AuthProvider();
     _userProvider = UserProvider();
+  }
+
+  Future<void> showTyC() async {
+    Navigator.pushNamed(context!, 'tyc');
   }
 
   Future<void> registerUser() async {
@@ -30,11 +35,13 @@ class RegisterController {
         email.isEmpty ||
         password.isEmpty ||
         passwordConfirm.isEmpty) {
-      debugPrint('### NINGUNA CASILLA DEBE IR VACIA ####');
+      debugPrint('### NINGUNA CASILLA DEBE IR VACÍA ####');
     } else if (password != passwordConfirm) {
       debugPrint('### LAS CONTRASEÑAS DEBEN IR IGUALES ####');
     } else if (password.length < 6 || passwordConfirm.length < 6) {
       debugPrint('### LAS CONTRASEÑAS DEBEN SER MAYORES A 6 CARACTERES ####');
+    } else if (!isTyCCheck) {
+      debugPrint('### ACEPTA TÉRMINOS Y CONDICIONES ####');
     } else {
       try {
         bool isRegister = await _authProvider!.register(email, password);
