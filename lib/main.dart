@@ -2,12 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:malpav3/firebase_options.dart';
-import 'package:malpav3/src/screens/createReport/create_report_page.dart';
-import 'package:malpav3/src/screens/home/home_page.dart';
-import 'package:malpav3/src/screens/mainMenu/main_menu_page.dart';
-import 'package:malpav3/src/screens/register/register_page.dart';
-
-import 'src/screens/tyc/tyc_page.dart';
+import 'package:malpav3/src/login/login_page.dart';
+import 'package:malpav3/src/register/register_page.dart';
+import 'package:malpav3/src/report_event/report_event_page.dart';
 
 Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,13 +35,11 @@ class _MalpaState extends State<Malpa> {
       ),
       debugShowCheckedModeBanner: false,
       title: 'malpa',
-      initialRoute: 'home',
+      initialRoute: 'report/event',
       routes: {
-        'home': (BuildContext context) => const HomePage(),
+        'login': (BuildContext context) => const LoginPage(),
         'register': (BuildContext context) => const RegisterPage(),
-        'tyc': (BuildContext context) => const TyCPage(),
-        'mainMenu': (BuildContext context) => const MainMenuPage(),
-        'reportPage': (BuildContext context) => const CreateReportPage(),
+        'report/event': (BuildContext context) => const ReportEventPage(),
       },
     );
   }

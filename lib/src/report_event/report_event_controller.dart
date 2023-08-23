@@ -1,50 +1,42 @@
+// ignore_for_file: unused_field
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as location;
-import 'package:malpav3/src/utils/utils.dart';
 
-class CreateReportController {
-  // ATRIBUTOS
+class ReportEventController {
   BuildContext? context;
   Function? refresh;
-  Position? _position;
-  // ignore: unused_field
-  StreamSubscription<Position>? _positionStream;
   final TextEditingController placaCapture = TextEditingController();
-
   final GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
-  final CameraPosition initialPosition = const CameraPosition(
-    target: LatLng(4.650992320303, -74.1248141),
-    zoom: 12,
-  );
+  CameraPosition initialPosition =
+      const CameraPosition(target: LatLng(4.5882045, -74.1236818), zoom: 17.0);
+  // ignore: unused_field
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
+  Position? _position;
+  StreamSubscription<Position>? _positionStream;
   final LocationSettings _locationSettings = const LocationSettings(
-    accuracy: LocationAccuracy.best,
-    distanceFilter: 1,
-  );
-  // CONSTRUCTOR
+      accuracy: LocationAccuracy.best, distanceFilter: 1);
+
   void init(BuildContext context, Function refresh) {
     this.context = context;
     this.refresh = refresh;
     checkGps();
   }
 
-  // MÉTODOS
+  // ------ METODO CONTROLADOR DEL GOOGLE MAPS
+  void onMapCreate(GoogleMapController controller) {
+    _mapController.complete(controller);
+  }
 
-  // ------ MÉTODO CONTROLADOR DEL GOOGLE MAPS
-  // void onMapCreate(GoogleMapController controller) {
-  //   controller.setMapStyle(StylesGoogleMaps.mapsStyles);
-  //   _mapController.complete(controller);
-  // }
-
-  //Determinar posición
-  Future<Position> _determinatePosition() async {
+  // ------ METODO PARA DETERMINAR LA POSICION
+  Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
-    //los servicios de ubicación están habilitados?
+    // Probar si los servicios de ubicación están habilitados.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       // Los servicios de ubicación no están habilitados, no continúe
@@ -76,7 +68,7 @@ class CreateReportController {
     return await Geolocator.getCurrentPosition();
   }
 
-  // ---- MÉTODO PARA LA ANIMACIÓN DE LA CÁMARA Y UBICAR EN POSICIÓN DEL CONDUCTOR
+  // ---- MÉTODO PARA LA ANIMACIÓN DE LA CÁMARA Y UBICAR EN POSICIÓN DEL CONDUCTOR/CLIENTE
   Future<void> animateCameraToPosition(
     double latitude,
     double longitude,
@@ -100,30 +92,19 @@ class CreateReportController {
         _position!.latitude,
         _position!.longitude,
       );
+      debugPrint('#### EJECUTANDO centerPosition()\n'
+          'LATLNG ${_position!.latitude} - ${_position!.longitude}');
     } else {
       debugPrint('#### EL GPS NO ESTÁ ACTIVADO');
-      showSnackBar(
-          'Debes activar el GPS para obtener tu posición,\n'
-          'de lo contrario no podemos continuar con el servicio.',
-          context!);
     }
   }
 
-  // ---- MÉTODO PARA MANTENER ACTUALIZADA LA POSICIÓN
+  // ---- MÉTODO PARA MANTENER ACTUALIZADA LA POSICIÓN DEL CONDUCTOR/CLIENTE
   Future<void> updateLocation() async {
     try {
-      await _determinatePosition();
+      await _determinePosition();
       _position = await Geolocator.getLastKnownPosition();
       centerPosition();
-      _positionStream =
-          Geolocator.getPositionStream(locationSettings: _locationSettings)
-              .listen((Position position) {
-        _position = position;
-        animateCameraToPosition(
-          _position!.latitude,
-          _position!.longitude,
-        );
-      });
     } catch (e) {
       debugPrint('#### ERROR EN EL MÉTODO PARA updateLocation() ');
     }

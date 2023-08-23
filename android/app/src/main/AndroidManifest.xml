@@ -1,4 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--- PERMISOS PARA LOCALIZACION GPS -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!--- END -->
     <application
         android:label="malpav3"
         android:name="${applicationName}"
@@ -29,5 +35,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyBzj-Q0SGM2sN296BRbJ03yWnbH1BQPcOs" />
     </application>
 </manifest>

@@ -1,41 +1,41 @@
 // To parse this JSON data, do
 //
-//     final userModel = userModelFromJson(jsonString);
+//     final userApp = userAppFromJson(jsonString);
 
 import 'dart:convert';
 
-UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
+UserApp userAppFromJson(String str) => UserApp.fromJson(json.decode(str));
 
-String userModelToJson(UserModel data) => json.encode(data.toJson());
+String userAppToJson(UserApp data) => json.encode(data.toJson());
 
-class UserModel {
+class UserApp {
   String id;
-  String nombre;
-  String correo;
-  String telefono;
-  String contrasena;
+  String user;
+  String phone;
+  String email;
+  String password;
 
-  UserModel({
+  UserApp({
     required this.id,
-    required this.nombre,
-    required this.correo,
-    required this.telefono,
-    required this.contrasena,
+    required this.user,
+    required this.phone,
+    required this.email,
+    required this.password,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-    id: json["id"],
-    nombre: json["nombre"],
-    correo: json["correo"],
-    telefono: json["telefono"],
-    contrasena: json["contrasena"],
-  );
+  factory UserApp.fromJson(Map<String, dynamic> json) => UserApp(
+        id: json["id"],
+        user: json["user"],
+        phone: json["phone"],
+        email: json["email"],
+        password: json["password"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "nombre": nombre,
-    "correo": correo,
-    "telefono": telefono,
-    "contrasena": contrasena,
-  };
+        "id": id,
+        "user": user,
+        "phone": phone,
+        "email": email,
+        "password": password,
+      };
 }
