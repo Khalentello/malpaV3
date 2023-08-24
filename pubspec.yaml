@@ -46,10 +46,33 @@ dependencies:
   path_provider: ^2.1.0
   path: ^1.8.3
   image_picker: ^1.0.2
+  #splash Screen
+  flutter_native_splash: ^2.3.2
+  #Launcher Icon
+  flutter_launcher_icons: "^0.13.1"
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_native_splash:
+  background_image: "assets/img/LogoMalpaV2.jpg"
+  # color: "#898C26"
+  # image: "assets/img/LogoMalpaV2.jpg"
+  android: true
+  ios: true
+  #web: false
+  android_12:
+    # Splash screen background color.
+    color: "#898C26"
+    image: assets/img/MalpaLogoRedondo.png
+  # dart run flutter_native_splash:create
+
+flutter_launcher_icons:
+  image_path: "assets/img/MalpaLogoRedondo.png"
+  android: true
+  ios: true
+  # dart run flutter_launcher_icons
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

@@ -1,11 +1,11 @@
 // ignore_for_file: unused_field
 
 import 'dart:async';
-import 'package:camera/camera.dart';
+// import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:image_picker/image_picker.dart';
+// import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart' as location;
 
 class ReportEventController {
@@ -130,6 +130,6 @@ class ReportEventController {
 
   // CAPTURAR FOTO
   Future<void> getImage() async {
-    final ImagePicker imagePicker = ImagePicker();
+    // final ImagePicker imagePicker = ImagePicker();
   }
 }
