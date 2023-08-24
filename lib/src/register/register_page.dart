@@ -49,6 +49,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   _txtData(),
                   _nameInput(),
                   _phoneInput(),
+                  _emailInput(),
                   _password1Input(),
                   _password2Input(),
                   // _divDataUser(),
@@ -82,6 +83,17 @@ class _RegisterPageState extends State<RegisterPage> {
       hintText: "Nombre de usuario",
       icon: 3,
       textInputType: TextInputType.name,
+      marginBottom: 37,
+      marginTop: 0,
+    );
+  }
+
+  Widget _emailInput() {
+    return TextInputField(
+      textEditingController: _controller.emailUser,
+      hintText: "Ingrese su correo electrónico",
+      icon: 1,
+      textInputType: TextInputType.phone,
       marginBottom: 37,
       marginTop: 0,
     );

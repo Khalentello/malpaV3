@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBzj-Q0SGM2sN296BRbJ03yWnbH1BQPcOs',
-    appId: '1:840438567344:android:2703fef646378d86d14675',
-    messagingSenderId: '840438567344',
-    projectId: 'malpav3-c686c',
-    storageBucket: 'malpav3-c686c.appspot.com',
+    apiKey: 'AIzaSyDAwKRr5We886G6odAVYXxD2ISbs6GIwEY',
+    appId: '1:203648145173:android:5214ad7712461938607b1c',
+    messagingSenderId: '203648145173',
+    projectId: 'malpav4-431b9',
+    storageBucket: 'malpav4-431b9.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC-kjYha2uDkMeLRKCRqJ3iSQcJRcbAy9Q',
-    appId: '1:840438567344:ios:b73dbfe749b84b19d14675',
-    messagingSenderId: '840438567344',
-    projectId: 'malpav3-c686c',
-    storageBucket: 'malpav3-c686c.appspot.com',
-    iosClientId: '840438567344-4e09c7ea0197251gbq691b0kldh4enet.apps.googleusercontent.com',
+    apiKey: 'AIzaSyAY-ACThblZFvmXmTT-uqK9pSuSm18QzJU',
+    appId: '1:203648145173:ios:f52d39a98108532e607b1c',
+    messagingSenderId: '203648145173',
+    projectId: 'malpav4-431b9',
+    storageBucket: 'malpav4-431b9.appspot.com',
+    iosClientId: '203648145173-oumved1uik7p39a93cbbk5878e2mp2jr.apps.googleusercontent.com',
     iosBundleId: 'com.malpav3.malpav3',
   );
 }

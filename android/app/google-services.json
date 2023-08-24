@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "840438567344",
-    "project_id": "malpav3-c686c",
-    "storage_bucket": "malpav3-c686c.appspot.com"
+    "project_number": "203648145173",
+    "project_id": "malpav4-431b9",
+    "storage_bucket": "malpav4-431b9.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:840438567344:android:2703fef646378d86d14675",
+        "mobilesdk_app_id": "1:203648145173:android:5214ad7712461938607b1c",
         "android_client_info": {
           "package_name": "com.malpav3.malpav3"
         }
       },
       "oauth_client": [
         {
-          "client_id": "840438567344-e59f2rt4dapecntgum32r23v5et9b7j6.apps.googleusercontent.com",
+          "client_id": "203648145173-jjhalk9multkaibbmksk98jh348p96md.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBzj-Q0SGM2sN296BRbJ03yWnbH1BQPcOs"
+          "current_key": "AIzaSyDAwKRr5We886G6odAVYXxD2ISbs6GIwEY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "840438567344-e59f2rt4dapecntgum32r23v5et9b7j6.apps.googleusercontent.com",
+              "client_id": "203648145173-jjhalk9multkaibbmksk98jh348p96md.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

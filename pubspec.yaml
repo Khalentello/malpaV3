@@ -56,7 +56,7 @@ dev_dependencies:
     sdk: flutter
 
 flutter_native_splash:
-  background_image: "assets/img/LogoMalpaV2.jpg"
+  background_image: "assets/img/MalpaLogoRedondo.png"
   # color: "#898C26"
   # image: "assets/img/LogoMalpaV2.jpg"
   android: true
@@ -65,11 +65,10 @@ flutter_native_splash:
   android_12:
     # Splash screen background color.
     color: "#898C26"
-    image: assets/img/MalpaLogoRedondo.png
   # dart run flutter_native_splash:create
 
 flutter_launcher_icons:
-  image_path: "assets/img/MalpaLogoRedondo.png"
+  image_path: "assets/img/MalpaLogoRedondo2.png"
   android: true
   ios: true
   # dart run flutter_launcher_icons
