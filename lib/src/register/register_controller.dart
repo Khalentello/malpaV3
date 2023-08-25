@@ -24,6 +24,10 @@ class RegisterController {
     Navigator.pushNamed(context!, 'tyc');
   }
 
+  Future<void> goLogin() async {
+    Navigator.pushNamed(context!, 'login');
+  }
+
   Future<void> registerUser() async {
     String name = nameUser.text;
     String phone = phoneUser.text.trim();

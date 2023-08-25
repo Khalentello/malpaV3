@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:malpav3/src/register/register_controller.dart';
 import 'package:malpav3/src/utils/colors_generic.dart';
+import 'package:malpav3/widgets/static_text_register.dart';
 import 'package:malpav3/widgets/text_input_field.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -28,35 +29,34 @@ class _RegisterPageState extends State<RegisterPage> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          iconTheme: const IconThemeData(color: Colors.black),
-          title: const Text(
-            'Regístrate',
-            style: TextStyle(
-              color: Colors.black,
-            ),
-          ),
-          backgroundColor: Colors.amber,
-        ),
         body: Form(
           child: Container(
-            color: Colors.amber,
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _txtData(),
-                  _nameInput(),
-                  _phoneInput(),
-                  _emailInput(),
-                  _password1Input(),
-                  _password2Input(),
-                  // _divDataUser(),
-                  _checkTermsConditions(),
-                  _btnRegisterUser(),
-                ],
-              ),
+            color: primaryColor,
+            padding: const EdgeInsets.only(
+              left: 12,
+              right: 12,
+              top: 66,
+            ),
+            child: Column(
+              children: [
+                _firstNameInput(),
+                _lastNameInput(),
+                _phoneInput(),
+                _emailInput(),
+                _password1Input(),
+                _password2Input(),
+                _checkTermsConditions(),
+                Container(
+                  width: double.infinity,
+                  margin: EdgeInsets.only(left: 17, right: 17, top: 34),
+                  child: Row(
+                    children: [
+                      Expanded(flex: 1, child: _btnGoBack()),
+                      Expanded(flex: 1, child: _btnRegisterUser()),
+                    ],
+                  ),
+                )
+              ],
             ),
           ),
         ),
@@ -64,246 +64,158 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _txtData() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 12),
-      child: const Text(
-        'Ingresa los siguientes datos',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
-      ),
-    );
-  }
-
-  Widget _nameInput() {
-    return TextInputField(
-      textEditingController: _controller.nameUser,
-      hintText: "Nombre de usuario",
-      icon: 3,
-      textInputType: TextInputType.name,
-      marginBottom: 37,
-      marginTop: 0,
-    );
-  }
-
-  Widget _emailInput() {
-    return TextInputField(
-      textEditingController: _controller.emailUser,
-      hintText: "Ingrese su correo electrónico",
-      icon: 1,
-      textInputType: TextInputType.phone,
-      marginBottom: 37,
-      marginTop: 0,
-    );
-  }
-
-  Widget _phoneInput() {
-    return TextInputField(
-      textEditingController: _controller.phoneUser,
-      hintText: "Numero de celular",
-      icon: 1,
-      textInputType: TextInputType.phone,
-      marginBottom: 37,
-      marginTop: 0,
-    );
-  }
-
-  Widget _password1Input() {
-    return TextInputField(
-      textEditingController: _controller.passwordUser,
-      hintText: "Ingresa tu contraseña",
-      icon: 2,
-      textInputType: TextInputType.visiblePassword,
-      marginBottom: 37,
-      isPass: true,
-      marginTop: 0,
-    );
-  }
-
-  Widget _password2Input() {
-    return TextInputField(
-      textEditingController: _controller.repeatPasswordUser,
-      hintText: "Repite tu contraseña",
-      icon: 2,
-      textInputType: TextInputType.visiblePassword,
-      marginBottom: 37,
-      isPass: true,
-      marginTop: 0,
-    );
-  }
-
-  // Widget _divDataUser() {
-  //   return Column(
-  //     children: [
-  //       TextField(
-  //         controller: _controller.nameUser,
-  //         decoration: InputDecoration(
-  //           hintText: 'Nombre de usuario',
-  //           hintStyle: const TextStyle(color: Colors.black),
-  //           labelText: 'Nombre de usuario',
-  //           labelStyle: const TextStyle(
-  //             color: Colors.black,
-  //             fontWeight: FontWeight.w600,
-  //           ),
-  //           suffixIcon: const Icon(
-  //             Icons.email_rounded,
-  //             color: Colors.black,
-  //           ),
-  //           filled: true,
-  //           fillColor: Colors.amber.withOpacity(0.3),
-  //           border: const OutlineInputBorder(
-  //             borderSide: BorderSide.none,
-  //             borderRadius: BorderRadius.all(Radius.circular(25.0)),
-  //           ),
-  //         ),
-  //       ),
-  //       const SizedBox(height: 40),
-  //       TextField(
-  //         controller: _controller.phoneUser,
-  //         keyboardType: TextInputType.phone,
-  //         decoration: InputDecoration(
-  //           hintText: 'Celular',
-  //           hintStyle: const TextStyle(color: Colors.black),
-  //           labelText: 'Ingrese el numero celular',
-  //           labelStyle: const TextStyle(
-  //             color: Colors.black,
-  //             fontWeight: FontWeight.w600,
-  //           ),
-  //           suffixIcon: const Icon(
-  //             Icons.phone_android_rounded,
-  //             color: Colors.black,
-  //           ),
-  //           filled: true,
-  //           fillColor: Colors.amber.withOpacity(0.3),
-  //           border: const OutlineInputBorder(
-  //             borderSide: BorderSide.none,
-  //             borderRadius: BorderRadius.all(Radius.circular(25.0)),
-  //           ),
-  //         ),
-  //       ),
-  //       const SizedBox(height: 40),
-  //       TextField(
-  //         controller: _controller.emailUser,
-  //         keyboardType: TextInputType.emailAddress,
-  //         decoration: InputDecoration(
-  //           hintText: 'email@domain.com',
-  //           hintStyle: const TextStyle(color: Colors.black),
-  //           labelText: 'Ingrese tu correo electronico',
-  //           labelStyle: const TextStyle(
-  //             color: Colors.black,
-  //             fontWeight: FontWeight.w600,
-  //           ),
-  //           suffixIcon: const Icon(
-  //             Icons.phone_android_rounded,
-  //             color: Colors.black,
-  //           ),
-  //           filled: true,
-  //           fillColor: Colors.amber.withOpacity(0.3),
-  //           border: const OutlineInputBorder(
-  //             borderSide: BorderSide.none,
-  //             borderRadius: BorderRadius.all(Radius.circular(25.0)),
-  //           ),
-  //         ),
-  //       ),
-  //       const SizedBox(height: 40),
-  //       TextField(
-  //         controller: _controller.passwordUser,
-  //         obscureText: true,
-  //         decoration: InputDecoration(
-  //           hintText: '*************',
-  //           hintStyle: const TextStyle(color: Colors.black),
-  //           labelText: 'Ingrese la contraseña',
-  //           labelStyle: const TextStyle(
-  //             color: Colors.black,
-  //             fontWeight: FontWeight.w600,
-  //           ),
-  //           suffixIcon: const Icon(
-  //             Icons.lock_clock_rounded,
-  //             color: Colors.black,
-  //           ),
-  //           filled: true,
-  //           fillColor: Colors.amber.withOpacity(0.3),
-  //           border: const OutlineInputBorder(
-  //             borderSide: BorderSide.none,
-  //             borderRadius: BorderRadius.all(Radius.circular(25.0)),
-  //           ),
-  //         ),
-  //       ),
-  //       const SizedBox(height: 40),
-  //       TextField(
-  //         controller: _controller.repeatPasswordUser,
-  //         obscureText: true,
-  //         decoration: InputDecoration(
-  //           hintText: '*************',
-  //           hintStyle: const TextStyle(color: Colors.black),
-  //           labelText: 'Repita la contraseña',
-  //           labelStyle: const TextStyle(
-  //             color: Colors.black,
-  //             fontWeight: FontWeight.w600,
-  //           ),
-  //           suffixIcon: const Icon(
-  //             Icons.lock_clock_rounded,
-  //             color: Colors.black,
-  //           ),
-  //           filled: true,
-  //           fillColor: Colors.amber.withOpacity(0.3),
-  //           border: const OutlineInputBorder(
-  //             borderSide: BorderSide.none,
-  //             borderRadius: BorderRadius.all(Radius.circular(25.0)),
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-  Widget _checkTermsConditions() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+  Widget _firstNameInput() {
+    return Column(
       children: [
-        Checkbox(
-          value: _controller.isTyCCheck,
-          onChanged: (value) {
-            setState(() {
-              _controller.isTyCCheck = value!;
-            });
-          },
-          checkColor: Colors.white,
-          activeColor: buttonColor,
-          hoverColor: Colors.amber,
+        StaticTextRegister(
+          staticText: "Nombre(s)",
         ),
-        const Text(
-          "Aceptas los ",
-          style: TextStyle(
-            color: blackColor,
-            fontSize: 15,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        InkWell(
-          onTap: () => {
-            _controller.showTyC(),
-          },
-          child: const Text(
-            "términos y condiciones",
-            style: TextStyle(
-                color: blackColor,
-                fontSize: 15,
-                fontWeight: FontWeight.w800,
-                decoration: TextDecoration.underline),
-          ),
+        TextInputField(
+          textEditingController: _controller.nameUser,
+          hintText: "Ingresa tu nombre",
+          icon: 3,
+          textInputType: TextInputType.name,
+          marginBottom: 16,
+          marginTop: 5,
         ),
       ],
     );
   }
 
+  Widget _lastNameInput() {
+    return Column(
+      children: [
+        StaticTextRegister(
+          staticText: "Apellidos",
+        ),
+        TextInputField(
+          textEditingController: _controller.nameUser,
+          hintText: "Ingresa tus apellidos",
+          icon: 3,
+          textInputType: TextInputType.name,
+          marginBottom: 16,
+          marginTop: 5,
+        ),
+      ],
+    );
+  }
+
+  Widget _phoneInput() {
+    return Column(
+      children: [
+        StaticTextRegister(
+          staticText: "Numero de celular",
+        ),
+        TextInputField(
+          textEditingController: _controller.phoneUser,
+          hintText: "Numero de celular",
+          icon: 1,
+          textInputType: TextInputType.phone,
+          marginBottom: 16,
+          marginTop: 5,
+        ),
+      ],
+    );
+  }
+
+  Widget _emailInput() {
+    return Column(
+      children: [
+        StaticTextRegister(
+          staticText: "Dirección de correo electrónico",
+        ),
+        TextInputField(
+          textEditingController: _controller.emailUser,
+          hintText: "Ingrese su correo electrónico",
+          icon: 1,
+          textInputType: TextInputType.phone,
+          marginBottom: 16,
+          marginTop: 5,
+        ),
+      ],
+    );
+  }
+
+  Widget _password1Input() {
+    return Column(
+      children: [
+        StaticTextRegister(
+          staticText: 'Contraseña',
+        ),
+        TextInputField(
+          textEditingController: _controller.passwordUser,
+          hintText: "Ingresa tu contraseña",
+          icon: 2,
+          textInputType: TextInputType.visiblePassword,
+          marginBottom: 16,
+          isPass: true,
+          marginTop: 5,
+        ),
+      ],
+    );
+  }
+
+  Widget _password2Input() {
+    return Column(
+      children: [
+        StaticTextRegister(
+          staticText: "Repetir contraseña",
+        ),
+        TextInputField(
+          textEditingController: _controller.repeatPasswordUser,
+          hintText: "Repite tu contraseña",
+          icon: 2,
+          textInputType: TextInputType.visiblePassword,
+          marginBottom: 16,
+          isPass: true,
+          marginTop: 5,
+        ),
+      ],
+    );
+  }
+
+  Widget _checkTermsConditions() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 66),
+      child: Row(
+        children: [
+          Checkbox(
+            value: _controller.isTyCCheck,
+            onChanged: (value) {
+              setState(() {
+                _controller.isTyCCheck = value!;
+              });
+            },
+            checkColor: whiteColor,
+            activeColor: buttonColor,
+          ),
+          Flexible(
+            child: InkWell(
+              onTap: () => {
+                _controller.showTyC(),
+              },
+              child: const Text(
+                "Acepto Los Términos Y Condiciones Sujetos A Malpa",
+                softWrap: true,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: blackColor,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _btnRegisterUser() {
     return Container(
-      margin: const EdgeInsets.only(top: 47),
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-      width: double.infinity,
-      height: 50,
+      height: 38,
+      margin: EdgeInsets.only(left: 22),
       decoration: BoxDecoration(
         color: buttonColor,
         borderRadius: BorderRadius.circular(5),
@@ -321,44 +233,31 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
+  }
 
-    //   return Container(
-    //     margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 50),
-    //     padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-    //     width: double.infinity,
-    //     decoration: BoxDecoration(
-    //       gradient: LinearGradient(
-    //         colors: [Colors.amber.shade700, Colors.amberAccent],
-    //       ),
-    //       boxShadow: [
-    //         BoxShadow(
-    //           color: Colors.grey.withOpacity(0.5),
-    //           spreadRadius: 7,
-    //           blurRadius: 9,
-    //           offset: const Offset(0, 3), // changes position of shadow
-    //         ),
-    //       ],
-    //       borderRadius: BorderRadius.circular(15),
-    //     ),
-    //     child: GestureDetector(
-    //       onTap: () {
-    //         _controller.registerUser();
-    //       },
-    //       child: const Row(
-    //         mainAxisAlignment: MainAxisAlignment.center,
-    //         children: [
-    //           Text(
-    //             'Registrar ahora',
-    //             style: TextStyle(
-    //               fontWeight: FontWeight.bold,
-    //               fontSize: 20,
-    //             ),
-    //           ),
-    //           SizedBox(width: 30),
-    //           Icon(Icons.app_registration_rounded)
-    //         ],
-    //       ),
-    //     ),
-    //   );
+  Widget _btnGoBack() {
+    return Container(
+      height: 38,
+      margin: EdgeInsets.only(right: 22),
+      decoration: BoxDecoration(
+          color: primaryColor,
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(color: buttonColor)),
+      child: GestureDetector(
+        onTap: () {
+          _controller.goLogin();
+        },
+        child: const Center(
+          child: Text(
+            'Atrás',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              color: buttonColor,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
