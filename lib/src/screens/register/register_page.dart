@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:malpav3/src/register/register_controller.dart';
+import 'package:malpav3/src/screens/register/register_controller.dart';
 import 'package:malpav3/src/utils/colors_generic.dart';
 import 'package:malpav3/widgets/static_text_register.dart';
 import 'package:malpav3/widgets/text_input_field.dart';
@@ -29,13 +29,14 @@ class _RegisterPageState extends State<RegisterPage> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Form(
+        body: SingleChildScrollView(
           child: Container(
             color: primaryColor,
             padding: const EdgeInsets.only(
               left: 12,
               right: 12,
               top: 66,
+              bottom: 12,
             ),
             child: Column(
               children: [
@@ -216,19 +217,19 @@ class _RegisterPageState extends State<RegisterPage> {
     return Container(
       height: 38,
       margin: EdgeInsets.only(left: 22),
-      decoration: BoxDecoration(
-        color: buttonColor,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: GestureDetector(
-        onTap: () {
-          _controller.registerUser();
-        },
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: buttonColor,
+        ),
+        onPressed: () => _controller.registerUser(),
         child: const Center(
           child: Text(
             'Registrar',
             style: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white),
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              color: whiteColor,
+            ),
           ),
         ),
       ),
@@ -239,14 +240,11 @@ class _RegisterPageState extends State<RegisterPage> {
     return Container(
       height: 38,
       margin: EdgeInsets.only(right: 22),
-      decoration: BoxDecoration(
-          color: primaryColor,
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: buttonColor)),
-      child: GestureDetector(
-        onTap: () {
-          _controller.goLogin();
-        },
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            backgroundColor: primaryColor,
+            side: BorderSide(color: buttonColor)),
+        onPressed: () => _controller.goLogin(),
         child: const Center(
           child: Text(
             'Atrás',

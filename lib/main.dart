@@ -1,13 +1,12 @@
-import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:malpav3/firebase_options.dart';
-import 'package:malpav3/src/login/login_page.dart';
-import 'package:malpav3/src/register/register_page.dart';
-import 'package:malpav3/src/report_event/report_event_page.dart';
+import 'package:malpav3/src/screens/login/login_page.dart';
+import 'package:malpav3/src/screens/register/register_page.dart';
+import 'package:malpav3/src/screens/report_event/report_event_page.dart';
 // import 'package:malpav3/src/take_picture/take_picture_page.dart';
-import 'package:malpav3/src/tyc/tyc_page.dart';
+import 'package:malpav3/src/screens/tyc/tyc_page.dart';
 
 Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,12 +14,6 @@ Future<void> main(List<String> args) async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  // Obtain a list of the available cameras on the device.
-  final cameras = await availableCameras();
-
-  // Get a specific camera from the list of available cameras.
-  // final firstCamera = cameras.first;
 
   runApp(const Malpa());
 }
@@ -51,6 +44,7 @@ class _MalpaState extends State<Malpa> {
         'register': (BuildContext context) => const RegisterPage(),
         'report/event': (BuildContext context) => const ReportEventPage(),
         'tyc': (BuildContext context) => const TyCPage(),
+        'resetPassword': (BuildContext context) => const TyCPage(),
         // 'takePicture': (BuildContext context) => const TakePicturePage(
         //       camera: firstCamera,
         //     ),

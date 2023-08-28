@@ -1,6 +1,7 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:malpav3/src/login/login_controller.dart';
+import 'package:malpav3/src/screens/login/login_controller.dart';
 import 'package:malpav3/src/utils/colors_generic.dart';
 import 'package:malpav3/widgets/text_input_field.dart';
 
@@ -48,8 +49,11 @@ class _LoginPageState extends State<LoginPage> {
                         _emailInput(),
                         _passwordInput(),
                         _forgotPassword(),
+                        _controller.loginError
+                            ? _containerErrorMsg()
+                            : SizedBox.shrink(),
                         _btnLogin(),
-                        _btnRegisterPage(),
+                        _containerRegisterPage()
                       ],
                     ),
                   ),
@@ -111,35 +115,64 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _btnLogin() {
+  Widget _containerErrorMsg() {
     return Container(
-      // margin: const EdgeInsets.only(top: 47),
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+      margin: EdgeInsets.only(
+        bottom: 16,
+      ),
+      child: RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          text:
+              "Datos incorrectos por favor verifique su correo y/o contraseña. Si olvidó su contraseña ",
+          style: TextStyle(
+            color: alertColor,
+            fontWeight: FontWeight.w800,
+            fontSize: 15,
+          ),
+          children: [
+            TextSpan(
+              text: "toca aca",
+              style: TextStyle(
+                color: buttonColor,
+                decoration: TextDecoration.underline,
+                decorationThickness: 2,
+                fontWeight: FontWeight.w900,
+                fontSize: 15,
+              ),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () => _controller.goResetPassword(),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _btnLogin() {
+    return SizedBox(
       width: double.infinity,
       height: 50,
-      decoration: BoxDecoration(
-        color: buttonColor,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: GestureDetector(
-        onTap: () {
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: buttonColor,
+        ),
+        onPressed: () => setState(() {
           _controller.login();
-        },
-        child: const Center(
-          child: Text(
-            'Iniciar sesión',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-              color: Colors.white,
-            ),
+        }),
+        child: Text(
+          'Iniciar sesión',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 15,
+            color: whiteColor,
           ),
         ),
       ),
     );
   }
 
-  Widget _btnRegisterPage() {
+  Widget _containerRegisterPage() {
     return Container(
       margin: const EdgeInsets.only(
         top: 35,

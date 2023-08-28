@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:malpav3/src/report_event/report_event_controller.dart';
+import 'package:malpav3/src/screens/report_event/report_event_controller.dart';
 import 'package:malpav3/src/utils/colors_generic.dart';
 import 'package:malpav3/widgets/text_input_field.dart';
 
@@ -81,7 +81,7 @@ class _ReportEventPageState extends State<ReportEventPage> {
       initialCameraPosition: _controller.initialPosition,
       onMapCreated: _controller.onMapCreate,
       myLocationEnabled: true,
-      myLocationButtonEnabled: false,
+      myLocationButtonEnabled: true,
     );
   }
 
@@ -192,9 +192,8 @@ class _ReportEventPageState extends State<ReportEventPage> {
         child: Directionality(
           textDirection: TextDirection.rtl,
           child: ElevatedButton.icon(
-            onPressed: () => {
-              _controller.openCamera(),
-              FocusScope.of(context).unfocus(),
+            onPressed: () async {
+              _controller.uploadPicture();
             },
             label: const Text(
               'Tomar Foto',

@@ -8,3 +8,4 @@ const hintTextColor = Color(0xFFABABAB);
 const bottomBarColor = Color(0xFFC9CB96);
 const whiteColor = Color(0xFFFFFFFF);
 const blackColor = Color(0xFF282828);
+const alertColor = Color(0xFF6D0202);

@@ -1,11 +1,14 @@
 // ignore_for_file: unused_field
 
 import 'dart:async';
+import 'dart:io';
 // import 'package:camera/camera.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:location/location.dart' as location;
 
 class ReportEventController {
@@ -21,6 +24,8 @@ class ReportEventController {
   StreamSubscription<Position>? _positionStream;
   final LocationSettings _locationSettings = const LocationSettings(
       accuracy: LocationAccuracy.best, distanceFilter: 1);
+  String imageUrl = "";
+  Reference? referenceImageToUpload;
   void init(BuildContext context, Function refresh) {
     WidgetsFlutterBinding.ensureInitialized();
     this.context = context;
@@ -75,7 +80,7 @@ class ReportEventController {
     double longitude,
   ) async {
     final GoogleMapController controller = await _mapController.future;
-    controller.animateCamera(
+    await controller.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
           bearing: 0,
@@ -89,7 +94,7 @@ class ReportEventController {
   // ---- MÉTODO PARA CENTRAR LA POSICIÓN EN EL MAPA
   Future<void> centerPosition() async {
     if (_position != null) {
-      animateCameraToPosition(
+      await animateCameraToPosition(
         _position!.latitude,
         _position!.longitude,
       );
@@ -124,12 +129,32 @@ class ReportEventController {
     }
   }
 
-  Future<void> openCamera() async {
-    Navigator.pushNamed(context!, 'takePicture');
+  Future<void> uploadPicture() async {
+    //Take a picture
+    ImagePicker imagePicker = ImagePicker();
+    XFile? file = await imagePicker.pickImage(
+      source: ImageSource.camera,
+    );
+    print('###${file?.path}');
+    if (file != null) {
+      Reference referenceImages = FirebaseStorage.instance.ref().child(
+          "Reportes/${FirebaseAuth.instance.currentUser!.uid.toString()}");
+
+      //Como se va a llamar el archivo al momento de subirlo
+
+      //Por nombre
+      // Reference referenceImageToUpload = referenceImages.child('${file?.name}');
+
+      //Por identificador único según la fecha
+      String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
+      Reference referenceImageToUpload = referenceImages.child(uniqueName);
+      try {
+        //guardar imagen
+        await referenceImageToUpload.putFile(File(file.path));
+        imageUrl = await referenceImageToUpload.getDownloadURL();
+      } catch (e) {}
+    }
   }
 
-  // CAPTURAR FOTO
-  Future<void> getImage() async {
-    // final ImagePicker imagePicker = ImagePicker();
-  }
+  Future<void> uploadReport() async {}
 }
