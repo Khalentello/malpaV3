@@ -11,20 +11,22 @@ class AuthProvider {
     try {
       await _firebaseAuth!
           .signInWithEmailAndPassword(email: email, password: password);
+      return true;
     } catch (e) {
       debugPrint('### ERROR METODO LOGIN AUTHPROVIDER ###');
+      return false;
     }
-    return true;
   }
 
   Future<bool> register(String email, String password) async {
     try {
       await _firebaseAuth!
           .createUserWithEmailAndPassword(email: email, password: password);
+      return true;
     } catch (e) {
       debugPrint('### ERROR METODO REGISTER AUTHPROVIDER $e ###');
+      return false;
     }
-    return true;
   }
 
   User? getUser() {

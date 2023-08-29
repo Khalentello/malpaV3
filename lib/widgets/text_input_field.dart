@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:malpav3/src/utils/colors_generic.dart';
 
 class TextInputField extends StatelessWidget {
   final TextEditingController textEditingController;
@@ -12,11 +13,14 @@ class TextInputField extends StatelessWidget {
   final int textInputLength;
   final double marginBottom;
   final double marginTop;
+  final bool withIcon;
+
   const TextInputField({
     super.key,
     required this.textEditingController,
     required this.hintText,
     this.isPass = false,
+    this.withIcon = false,
     required this.icon,
     required this.textInputType,
     this.textInputLength = 100,
@@ -27,7 +31,10 @@ class TextInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: marginBottom, top: marginTop),
+      margin: EdgeInsets.only(
+        bottom: marginBottom,
+        top: marginTop,
+      ),
       // Valor
       child: TextField(
         controller: textEditingController,
@@ -37,17 +44,26 @@ class TextInputField extends StatelessWidget {
           LengthLimitingTextInputFormatter(textInputLength),
           if (textInputLength == 10) FilteringTextInputFormatter.digitsOnly,
         ],
-
         // Propiedades estéticas
-
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: const TextStyle(
-              color: Colors.black, fontSize: 15, fontWeight: FontWeight.w400),
-          suffixIcon: Icon(
-            _iconsList[icon].icon,
-            color: Colors.black,
+            color: hintTextColor,
+            fontSize: 15,
+            fontWeight: FontWeight.w400,
           ),
+          prefixIcon: withIcon
+              ? Icon(
+                  _iconsList[icon].icon,
+                  color: buttonColor,
+                )
+              : null,
+          suffixIcon: isPass
+              ? Icon(
+                  Icons.remove_red_eye_outlined,
+                  color: blackColor,
+                )
+              : null,
           filled: true,
           fillColor: Colors.white,
           border: const OutlineInputBorder(
