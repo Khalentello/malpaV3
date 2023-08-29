@@ -162,7 +162,7 @@ class _ReportEventPageState extends State<ReportEventPage> {
           textDirection: TextDirection.rtl,
           child: ElevatedButton.icon(
             onPressed: () => {
-              // Navigator.pushNamed(context, 'Reportar'),
+              _controller.uploadReport(),
               FocusScope.of(context).unfocus(),
             },
             label: const Text(
@@ -192,7 +192,7 @@ class _ReportEventPageState extends State<ReportEventPage> {
         child: Directionality(
           textDirection: TextDirection.rtl,
           child: ElevatedButton.icon(
-            onPressed: () async {
+            onPressed: () {
               _controller.uploadPicture();
             },
             label: const Text(

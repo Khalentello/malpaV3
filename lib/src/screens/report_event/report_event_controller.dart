@@ -2,13 +2,13 @@
 
 import 'dart:async';
 import 'dart:io';
-// import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:location/location.dart' as location;
 
 class ReportEventController {
@@ -17,7 +17,7 @@ class ReportEventController {
   final TextEditingController placaCapture = TextEditingController();
   final GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
   CameraPosition initialPosition =
-      const CameraPosition(target: LatLng(4.5882045, -74.1236818), zoom: 17.0);
+      const CameraPosition(target: LatLng(4.5882045, -74.1236818), zoom: 5);
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
   Position? _position;
@@ -26,6 +26,8 @@ class ReportEventController {
       accuracy: LocationAccuracy.best, distanceFilter: 1);
   String imageUrl = "";
   Reference? referenceImageToUpload;
+  List<XFile?> arrayImages = [];
+  List<String?> arrayImagesPath = [];
   void init(BuildContext context, Function refresh) {
     WidgetsFlutterBinding.ensureInitialized();
     this.context = context;
@@ -131,14 +133,43 @@ class ReportEventController {
 
   Future<void> uploadPicture() async {
     //Take a picture
-    ImagePicker imagePicker = ImagePicker();
-    XFile? file = await imagePicker.pickImage(
-      source: ImageSource.camera,
-    );
-    print('###${file?.path}');
-    if (file != null) {
-      Reference referenceImages = FirebaseStorage.instance.ref().child(
-          "Reportes/${FirebaseAuth.instance.currentUser!.uid.toString()}");
+    arrayImages.removeWhere((element) => [null, "", false].contains(element));
+    if (arrayImages.length <= 4) {
+      ImagePicker imagePicker = await ImagePicker();
+      arrayImages.add(
+        await imagePicker.pickImage(
+          source: ImageSource.camera,
+        ),
+      );
+    } else {
+      debugPrint('Máximo imágenes');
+      showDialog<String>(
+        context: this.context!,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Máximo de fotos tomadas'),
+          content: const Text('Solo se admiten 5 fotos por reporte'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Entendido'),
+            ),
+            TextButton(
+              onPressed: () => {
+                Navigator.pop(context),
+                arrayImages = [],
+              },
+              child: const Text('Borrar todas las fotos'),
+            ),
+          ],
+        ),
+      );
+    }
+    print('###${arrayImages.length}');
+    print('###${arrayImages}');
+
+    if (arrayImages.isNotEmpty) {
+      // Reference referenceImages = FirebaseStorage.instance.ref().child(
+      // "Reportes/${FirebaseAuth.instance.currentUser!.uid.toString()}");
 
       //Como se va a llamar el archivo al momento de subirlo
 
@@ -146,15 +177,18 @@ class ReportEventController {
       // Reference referenceImageToUpload = referenceImages.child('${file?.name}');
 
       //Por identificador único según la fecha
-      String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
-      Reference referenceImageToUpload = referenceImages.child(uniqueName);
-      try {
-        //guardar imagen
-        await referenceImageToUpload.putFile(File(file.path));
-        imageUrl = await referenceImageToUpload.getDownloadURL();
-      } catch (e) {}
+      // String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
+      // Reference referenceImageToUpload = referenceImages.child(uniqueName);
+      // try {
+      //   //guardar imagen
+      //   await referenceImageToUpload.putFile(File(file.path));
+      //   imageUrl = await referenceImageToUpload.getDownloadURL();
+      // } catch (e) {}
     }
   }
 
-  Future<void> uploadReport() async {}
+  Future<void> uploadReport() async {
+    // debugPrint("###${arrayImages[0]?.path}");
+    print('###${arrayImages.length}');
+  }
 }
