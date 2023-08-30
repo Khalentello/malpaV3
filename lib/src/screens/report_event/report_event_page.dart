@@ -27,7 +27,7 @@ class _ReportEventPageState extends State<ReportEventPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amber.shade700,
+        backgroundColor: primaryColor,
         elevation: 5,
         iconTheme: const IconThemeData(
           color: Colors.black,
@@ -41,13 +41,7 @@ class _ReportEventPageState extends State<ReportEventPage> {
       ),
       body: Form(
         child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.amber.shade700, Colors.amber.shade200],
-            ),
-          ),
+          decoration: BoxDecoration(color: primaryColor),
           child: Column(
             children: [
               Expanded(
@@ -62,7 +56,7 @@ class _ReportEventPageState extends State<ReportEventPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       _inputPlacaVehiculo(),
-                      _listInfracciones(),
+                      // _listInfracciones(),
                       _btnTomarFoto(),
                       _btnUpload(),
                     ],

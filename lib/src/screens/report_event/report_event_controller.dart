@@ -10,10 +10,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:location/location.dart' as location;
+import 'package:malpav3/src/providers/database_provider.dart';
 
 class ReportEventController {
   BuildContext? context;
   Function? refresh;
+  DatabaseProvider? _databaseProvider;
   final TextEditingController placaCapture = TextEditingController();
   final GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
   CameraPosition initialPosition =
@@ -24,7 +26,7 @@ class ReportEventController {
   StreamSubscription<Position>? _positionStream;
   final LocationSettings _locationSettings = const LocationSettings(
       accuracy: LocationAccuracy.best, distanceFilter: 1);
-  String imageUrl = "";
+  List<String> imageUrl = [];
   Reference? referenceImageToUpload;
   List<XFile?> arrayImages = [];
   List<String?> arrayImagesPath = [];
@@ -33,6 +35,7 @@ class ReportEventController {
     this.context = context;
     this.refresh = refresh;
     checkGps();
+    _databaseProvider = DatabaseProvider();
   }
 
   // ------ METODO CONTROLADOR DEL GOOGLE MAPS
@@ -166,29 +169,50 @@ class ReportEventController {
     }
     print('###${arrayImages.length}');
     print('###${arrayImages}');
-
-    if (arrayImages.isNotEmpty) {
-      // Reference referenceImages = FirebaseStorage.instance.ref().child(
-      // "Reportes/${FirebaseAuth.instance.currentUser!.uid.toString()}");
-
-      //Como se va a llamar el archivo al momento de subirlo
-
-      //Por nombre
-      // Reference referenceImageToUpload = referenceImages.child('${file?.name}');
-
-      //Por identificador único según la fecha
-      // String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
-      // Reference referenceImageToUpload = referenceImages.child(uniqueName);
-      // try {
-      //   //guardar imagen
-      //   await referenceImageToUpload.putFile(File(file.path));
-      //   imageUrl = await referenceImageToUpload.getDownloadURL();
-      // } catch (e) {}
-    }
   }
 
   Future<void> uploadReport() async {
-    // debugPrint("###${arrayImages[0]?.path}");
-    print('###${arrayImages.length}');
+    // await _databaseProvider!.uploadReport(arrayImages);
+    debugPrint('##${arrayImages.length}');
+    if (arrayImages.isNotEmpty) {
+      //Nombre único para el reporte
+      String reportIdentifier =
+          DateTime.now().millisecondsSinceEpoch.toString();
+      debugPrint('##${reportIdentifier}');
+      //ruta donde se guardaran las imágenes
+      Reference referenceImages = FirebaseStorage.instance.ref().child(
+          "Reportes/user:${FirebaseAuth.instance.currentUser!.uid.toString()}/Reporte:${reportIdentifier}");
+      //ciclo para subir cada imagen
+      for (var i = 0; i < arrayImages.length; i++) {
+        //Ruta con el nombre de la imagen
+        Reference referenceImageToUpload =
+            referenceImages.child('${arrayImages[i]?.name}');
+        try {
+          //guardar imagen
+          await referenceImageToUpload.putFile(
+            File(arrayImages[i]!.path),
+          );
+          //Tomar el url donde se guarda la imagen
+          imageUrl.add(await referenceImageToUpload.getDownloadURL());
+          debugPrint('###${i}++${imageUrl.last}');
+        } catch (e) {
+          debugPrint('##Algo salio mal');
+        }
+      }
+
+      //   //Como se va a llamar el archivo al momento de subirlo
+
+      //   //Por nombre
+      //   // Reference referenceImageToUpload = referenceImages.child('${file?.name}');
+
+      //   //Por identificador único según la fecha
+      //   // String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
+      //   // Reference referenceImageToUpload = referenceImages.child(uniqueName);
+      //   // try {
+      //   //   //guardar imagen
+      //   //   await referenceImageToUpload.putFile(File(file.path));
+      //   //   imageUrl = await referenceImageToUpload.getDownloadURL();
+      //   // } catch (e) {}
+    }
   }
 }
