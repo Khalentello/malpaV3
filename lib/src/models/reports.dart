@@ -12,24 +12,25 @@ class UserApp {
   String reportId;
   String userId;
   String vehiclePlate;
-  String urlImageList;
+  List<String> imagesUrl;
 
   UserApp({
     required this.reportId,
     required this.userId,
     required this.vehiclePlate,
-    this.urlImageList = '',
+    required this.imagesUrl,
   });
 
   factory UserApp.fromJson(Map<String, dynamic> json) => UserApp(
-        reportId: json["reportId"],
-        userId: json["user"],
-        vehiclePlate: json["vehiclePlate"],
-      );
+      reportId: json["reportId"],
+      userId: json["user"],
+      vehiclePlate: json["vehiclePlate"],
+      imagesUrl: json['images']);
 
   Map<String, dynamic> toJson() => {
         "reportId": reportId,
         "userId": userId,
         "vehiclePlate": vehiclePlate,
+        "images": imagesUrl,
       };
 }

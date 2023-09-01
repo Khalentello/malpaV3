@@ -26,8 +26,9 @@ class _ReportEventPageState extends State<ReportEventPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: primaryColor,
+        backgroundColor: secondaryColor,
         elevation: 5,
         iconTheme: const IconThemeData(
           color: Colors.black,
@@ -41,7 +42,7 @@ class _ReportEventPageState extends State<ReportEventPage> {
       ),
       body: Form(
         child: Container(
-          decoration: BoxDecoration(color: primaryColor),
+          decoration: BoxDecoration(color: secondaryColor),
           child: Column(
             children: [
               Expanded(
@@ -55,6 +56,7 @@ class _ReportEventPageState extends State<ReportEventPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      _informacionInfracciones(),
                       _inputPlacaVehiculo(),
                       // _listInfracciones(),
                       _btnTomarFoto(),
@@ -79,6 +81,66 @@ class _ReportEventPageState extends State<ReportEventPage> {
     );
   }
 
+  Widget _informacionInfracciones() {
+    return Container(
+      padding: EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        color: staticFieldColor,
+      ),
+      child: SelectionContainer.disabled(
+        child: Column(
+          children: [
+            Text(
+              "Las infracciones que se pueden reportar son las siguientes: ",
+              style: TextStyle(
+                fontSize: 16,
+                color: whiteColor,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              child: Text(
+                textAlign: TextAlign.left,
+                "  1.Infraccion1",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: whiteColor,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              child: Text(
+                "  2.Infraccion2",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: whiteColor,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              child: Text(
+                textAlign: TextAlign.left,
+                "  3.Infraccion3",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: whiteColor,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _inputPlacaVehiculo() {
     return TextInputField(
       textEditingController: _controller.placaCapture,
@@ -92,61 +154,61 @@ class _ReportEventPageState extends State<ReportEventPage> {
     );
   }
 
-  //Widget Lista infracciones
+  // //Widget Lista infracciones
 
-  Widget _listInfracciones() {
-    final ValueNotifier<List<String>> listNotifier =
-        ValueNotifier<List<String>>(
-            ["Infraccion 1.", "Infraccion 2.", "Infraccion 3."]);
-    String? infraccionSeleccionada;
+  // Widget _listInfracciones() {
+  //   final ValueNotifier<List<String>> listNotifier =
+  //       ValueNotifier<List<String>>(
+  //           ["Infraccion 1.", "Infraccion 2.", "Infraccion 3."]);
+  //   String? infraccionSeleccionada;
 
-    return ValueListenableBuilder(
-      valueListenable: listNotifier,
-      builder: (BuildContext context, List<String> list, Widget? child) {
-        return Container(
-          width: double.infinity,
-          margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(
-              Radius.circular(5),
-            ),
-          ),
-          child: FormField<String>(
-            builder: (FormFieldState<String> state) {
-              return DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  underline: Container(),
-                  hint: const Text(
-                    "Seleccione la infraccion",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400),
-                  ),
-                  value: infraccionSeleccionada,
-                  isExpanded: true,
-                  onChanged: (newValue) {
-                    infraccionSeleccionada = newValue;
-                    // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
-                    listNotifier.notifyListeners();
-                    debugPrint(newValue);
-                  },
-                  items: list.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
+  //   return ValueListenableBuilder(
+  //     valueListenable: listNotifier,
+  //     builder: (BuildContext context, List<String> list, Widget? child) {
+  //       return Container(
+  //         width: double.infinity,
+  //         margin: const EdgeInsets.only(bottom: 12),
+  //         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+  //         decoration: const BoxDecoration(
+  //           color: Colors.white,
+  //           borderRadius: BorderRadius.all(
+  //             Radius.circular(5),
+  //           ),
+  //         ),
+  //         child: FormField<String>(
+  //           builder: (FormFieldState<String> state) {
+  //             return DropdownButtonHideUnderline(
+  //               child: DropdownButton<String>(
+  //                 underline: Container(),
+  //                 hint: const Text(
+  //                   "Seleccione la infraccion",
+  //                   style: TextStyle(
+  //                       color: Colors.black,
+  //                       fontSize: 15,
+  //                       fontWeight: FontWeight.w400),
+  //                 ),
+  //                 value: infraccionSeleccionada,
+  //                 isExpanded: true,
+  //                 onChanged: (newValue) {
+  //                   infraccionSeleccionada = newValue;
+  //                   // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+  //                   listNotifier.notifyListeners();
+  //                   debugPrint(newValue);
+  //                 },
+  //                 items: list.map((String value) {
+  //                   return DropdownMenuItem<String>(
+  //                     value: value,
+  //                     child: Text(value),
+  //                   );
+  //                 }).toList(),
+  //               ),
+  //             );
+  //           },
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   Widget _btnUpload() {
     return SizedBox(

@@ -1,14 +1,10 @@
 // ignore_for_file: unused_field
-
 import 'dart:async';
-import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:location/location.dart' as location;
 import 'package:malpav3/src/providers/database_provider.dart';
 
@@ -145,7 +141,7 @@ class ReportEventController {
         ),
       );
     } else {
-      debugPrint('Máximo imágenes');
+      debugPrint('###Máximo imágenes');
       showDialog<String>(
         context: this.context!,
         builder: (BuildContext context) => AlertDialog(
@@ -172,47 +168,70 @@ class ReportEventController {
   }
 
   Future<void> uploadReport() async {
-    // await _databaseProvider!.uploadReport(arrayImages);
-    debugPrint('##${arrayImages.length}');
-    if (arrayImages.isNotEmpty) {
-      //Nombre único para el reporte
-      String reportIdentifier =
-          DateTime.now().millisecondsSinceEpoch.toString();
-      debugPrint('##${reportIdentifier}');
-      //ruta donde se guardaran las imágenes
-      Reference referenceImages = FirebaseStorage.instance.ref().child(
-          "Reportes/user:${FirebaseAuth.instance.currentUser!.uid.toString()}/Reporte:${reportIdentifier}");
-      //ciclo para subir cada imagen
-      for (var i = 0; i < arrayImages.length; i++) {
-        //Ruta con el nombre de la imagen
-        Reference referenceImageToUpload =
-            referenceImages.child('${arrayImages[i]?.name}');
-        try {
-          //guardar imagen
-          await referenceImageToUpload.putFile(
-            File(arrayImages[i]!.path),
+    String placa = placaCapture.text.trim();
+    if (placa.length == 6) {
+      if (arrayImages.isNotEmpty) {
+        String report = await _databaseProvider!.uploadReport(arrayImages);
+        if (report != "") {
+          showDialog<String>(
+            context: this.context!,
+            builder: (BuildContext context) => AlertDialog(
+              title: const Text('Reporte Generado exitosamente'),
+              content: Text('Se ha generado el reporte: $report'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Entendido'),
+                ),
+              ],
+            ),
           );
-          //Tomar el url donde se guarda la imagen
-          imageUrl.add(await referenceImageToUpload.getDownloadURL());
-          debugPrint('###${i}++${imageUrl.last}');
-        } catch (e) {
-          debugPrint('##Algo salio mal');
+          arrayImages = [];
+          debugPrint('##${arrayImages.length}');
+        } else {
+          showDialog<String>(
+            context: this.context!,
+            builder: (BuildContext context) => AlertDialog(
+              title: const Text('Ha ocurrido un error'),
+              content: Text('Ha ocurrido un error, Intentar mas tarde'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Entendido'),
+                ),
+              ],
+            ),
+          );
         }
+      } else {
+        showDialog<String>(
+          context: this.context!,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Error'),
+            content: Text('No ha tomado ninguna imagen'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Entendido'),
+              ),
+            ],
+          ),
+        );
       }
-
-      //   //Como se va a llamar el archivo al momento de subirlo
-
-      //   //Por nombre
-      //   // Reference referenceImageToUpload = referenceImages.child('${file?.name}');
-
-      //   //Por identificador único según la fecha
-      //   // String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
-      //   // Reference referenceImageToUpload = referenceImages.child(uniqueName);
-      //   // try {
-      //   //   //guardar imagen
-      //   //   await referenceImageToUpload.putFile(File(file.path));
-      //   //   imageUrl = await referenceImageToUpload.getDownloadURL();
-      //   // } catch (e) {}
+    } else {
+      showDialog<String>(
+        context: this.context!,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Error'),
+          content: Text('Matricula de Vehiculo invalida (Placa) '),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Entendido'),
+            ),
+          ],
+        ),
+      );
     }
   }
 }
