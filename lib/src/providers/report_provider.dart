@@ -1,37 +1,32 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:malpav3/src/models/reports.dart';
 
-import 'package:malpav3/src/models/user.dart';
-import 'package:malpav3/src/providers/user_provider.dart';
 import 'package:malpav3/src/providers/auth_provider.dart';
 
-class DatabaseProvider {
+class ReportProvider {
+  CollectionReference? _collectionReference;
   List<String> imageUrl = [];
-  String reportIdentifier = "";
-  FirebaseStorage? _firebaseStorage;
+  FirebaseStorage? _firebaseReport;
   BuildContext? context;
   AuthProvider? _authProvider;
-  UserProvider? _userProvider;
-  DatabaseProvider() {
-    _firebaseStorage = FirebaseStorage.instance;
+  ReportProvider() {
+    _collectionReference = FirebaseFirestore.instance.collection("Reports");
+    _firebaseReport = FirebaseStorage.instance;
     _authProvider = AuthProvider();
-    _userProvider = UserProvider();
   }
 
-  Future<String> uploadReport(List images) async {
+  Future<List> uploadImages(List images, String reportNum) async {
     imageUrl = [];
-    final UserApp? userId =
-        await _userProvider!.getByIdUserApp(_authProvider!.getUser()!.uid);
+    final String? userId = await _authProvider!.getUser()!.uid;
     if (images.isNotEmpty) {
-      //Nombre único para el reporte
-      reportIdentifier = DateTime.now().millisecondsSinceEpoch.toString();
-      debugPrint('##${reportIdentifier}');
       //ruta donde se guardaran las imágenes
-      Reference referenceImages = _firebaseStorage!
+      Reference referenceImages = _firebaseReport!
           .ref()
-          .child("Reportes/Id:${userId?.id}/Reporte:${reportIdentifier}");
+          .child("Reportes/Id:${userId}/Reporte:${reportNum}");
       //ciclo para subir cada imagen
       for (var i = 0; i < images.length; i++) {
         //Ruta con el nombre de la imagen
@@ -50,7 +45,17 @@ class DatabaseProvider {
         }
       }
     }
-    debugPrint('##El numero de reporte:$reportIdentifier');
-    return reportIdentifier;
+    debugPrint('##El numero de reporte:$reportNum');
+    return imageUrl;
+  }
+
+  Future<void> createReport(NewReport report) async {
+    try {
+      return await _collectionReference!
+          .doc(report.userId)
+          .set(report.toJson());
+    } catch (e) {
+      debugPrint('### ERROR EN Create Report  ###');
+    }
   }
 }

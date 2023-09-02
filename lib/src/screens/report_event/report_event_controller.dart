@@ -1,27 +1,27 @@
-// ignore_for_file: unused_field
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:malpav3/src/models/reports.dart';
 import 'package:location/location.dart' as location;
-import 'package:malpav3/src/providers/database_provider.dart';
+import 'package:malpav3/src/providers/auth_provider.dart';
+import 'package:malpav3/src/providers/report_provider.dart';
 
 class ReportEventController {
   BuildContext? context;
   Function? refresh;
-  DatabaseProvider? _databaseProvider;
-  final TextEditingController placaCapture = TextEditingController();
+  ReportProvider? _reportProvider;
+  AuthProvider? _authProvider;
+  TextEditingController placaCapture = TextEditingController();
   final GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
   CameraPosition initialPosition =
       const CameraPosition(target: LatLng(4.5882045, -74.1236818), zoom: 5);
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
   Position? _position;
-  StreamSubscription<Position>? _positionStream;
-  final LocationSettings _locationSettings = const LocationSettings(
-      accuracy: LocationAccuracy.best, distanceFilter: 1);
+
   List<String> imageUrl = [];
   Reference? referenceImageToUpload;
   List<XFile?> arrayImages = [];
@@ -31,7 +31,8 @@ class ReportEventController {
     this.context = context;
     this.refresh = refresh;
     checkGps();
-    _databaseProvider = DatabaseProvider();
+    _reportProvider = ReportProvider();
+    _authProvider = AuthProvider();
   }
 
   // ------ METODO CONTROLADOR DEL GOOGLE MAPS
@@ -99,8 +100,8 @@ class ReportEventController {
         _position!.latitude,
         _position!.longitude,
       );
-      debugPrint('#### EJECUTANDO centerPosition()\n'
-          'LATLNG ${_position!.latitude} - ${_position!.longitude}');
+      debugPrint(
+          '#### EJECUTANDO centerPosition() LATLNG ${_position!.latitude} - ${_position!.longitude}');
     } else {
       debugPrint('#### EL GPS NO ESTÁ ACTIVADO');
     }
@@ -171,13 +172,27 @@ class ReportEventController {
     String placa = placaCapture.text.trim();
     if (placa.length == 6) {
       if (arrayImages.isNotEmpty) {
-        String report = await _databaseProvider!.uploadReport(arrayImages);
-        if (report != "") {
+        String reportIdentifier =
+            DateTime.now().millisecondsSinceEpoch.toString();
+        String userId = _authProvider!.getUser()!.uid;
+        debugPrint('###${userId}');
+        List imagesUrl =
+            await _reportProvider!.uploadImages(arrayImages, reportIdentifier);
+        if (imagesUrl.isNotEmpty) {
+          final NewReport report = NewReport(
+            reportId: reportIdentifier,
+            userId: userId,
+            vehiclePlate: placa,
+            imagesUrl: imagesUrl,
+            latitude: _position!.latitude,
+            longitude: _position!.longitude,
+          );
+          await _reportProvider!.createReport(report);
           showDialog<String>(
             context: this.context!,
             builder: (BuildContext context) => AlertDialog(
               title: const Text('Reporte Generado exitosamente'),
-              content: Text('Se ha generado el reporte: $report'),
+              content: Text('Se ha generado el reporte: $reportIdentifier'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.pop(context),
@@ -187,7 +202,7 @@ class ReportEventController {
             ),
           );
           arrayImages = [];
-          debugPrint('##${arrayImages.length}');
+          placaCapture.clear();
         } else {
           showDialog<String>(
             context: this.context!,
