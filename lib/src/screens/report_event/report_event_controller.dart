@@ -1,30 +1,28 @@
-// ignore_for_file: unused_field
-
 import 'dart:async';
-import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:malpav3/src/models/reports.dart';
 import 'package:location/location.dart' as location;
+import 'package:malpav3/src/providers/auth_provider.dart';
+import 'package:malpav3/src/providers/report_provider.dart';
 
 class ReportEventController {
   BuildContext? context;
   Function? refresh;
-  final TextEditingController placaCapture = TextEditingController();
+  ReportProvider? _reportProvider;
+  AuthProvider? _authProvider;
+  TextEditingController placaCapture = TextEditingController();
   final GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
   CameraPosition initialPosition =
       const CameraPosition(target: LatLng(4.5882045, -74.1236818), zoom: 5);
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
   Position? _position;
-  StreamSubscription<Position>? _positionStream;
-  final LocationSettings _locationSettings = const LocationSettings(
-      accuracy: LocationAccuracy.best, distanceFilter: 1);
-  String imageUrl = "";
+
+  List<String> imageUrl = [];
   Reference? referenceImageToUpload;
   List<XFile?> arrayImages = [];
   List<String?> arrayImagesPath = [];
@@ -33,6 +31,8 @@ class ReportEventController {
     this.context = context;
     this.refresh = refresh;
     checkGps();
+    _reportProvider = ReportProvider();
+    _authProvider = AuthProvider();
   }
 
   // ------ METODO CONTROLADOR DEL GOOGLE MAPS
@@ -100,8 +100,8 @@ class ReportEventController {
         _position!.latitude,
         _position!.longitude,
       );
-      debugPrint('#### EJECUTANDO centerPosition()\n'
-          'LATLNG ${_position!.latitude} - ${_position!.longitude}');
+      debugPrint(
+          '#### EJECUTANDO centerPosition() LATLNG ${_position!.latitude} - ${_position!.longitude}');
     } else {
       debugPrint('#### EL GPS NO ESTÁ ACTIVADO');
     }
@@ -142,7 +142,7 @@ class ReportEventController {
         ),
       );
     } else {
-      debugPrint('Máximo imágenes');
+      debugPrint('###Máximo imágenes');
       showDialog<String>(
         context: this.context!,
         builder: (BuildContext context) => AlertDialog(
@@ -166,29 +166,87 @@ class ReportEventController {
     }
     print('###${arrayImages.length}');
     print('###${arrayImages}');
-
-    if (arrayImages.isNotEmpty) {
-      // Reference referenceImages = FirebaseStorage.instance.ref().child(
-      // "Reportes/${FirebaseAuth.instance.currentUser!.uid.toString()}");
-
-      //Como se va a llamar el archivo al momento de subirlo
-
-      //Por nombre
-      // Reference referenceImageToUpload = referenceImages.child('${file?.name}');
-
-      //Por identificador único según la fecha
-      // String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
-      // Reference referenceImageToUpload = referenceImages.child(uniqueName);
-      // try {
-      //   //guardar imagen
-      //   await referenceImageToUpload.putFile(File(file.path));
-      //   imageUrl = await referenceImageToUpload.getDownloadURL();
-      // } catch (e) {}
-    }
   }
 
   Future<void> uploadReport() async {
-    // debugPrint("###${arrayImages[0]?.path}");
-    print('###${arrayImages.length}');
+    String placa = placaCapture.text.trim();
+    if (placa.length == 6) {
+      if (arrayImages.isNotEmpty) {
+        String reportIdentifier =
+            DateTime.now().millisecondsSinceEpoch.toString();
+        String userId = _authProvider!.getUser()!.uid;
+        debugPrint('###${userId}');
+        List imagesUrl =
+            await _reportProvider!.uploadImages(arrayImages, reportIdentifier);
+        if (imagesUrl.isNotEmpty) {
+          final NewReport report = NewReport(
+            reportId: reportIdentifier,
+            userId: userId,
+            vehiclePlate: placa,
+            imagesUrl: imagesUrl,
+            latitude: _position!.latitude,
+            longitude: _position!.longitude,
+          );
+          await _reportProvider!.createReport(report);
+          showDialog<String>(
+            context: this.context!,
+            builder: (BuildContext context) => AlertDialog(
+              title: const Text('Reporte Generado exitosamente'),
+              content: Text('Se ha generado el reporte: $reportIdentifier'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Entendido'),
+                ),
+              ],
+            ),
+          );
+          arrayImages = [];
+          placaCapture.clear();
+        } else {
+          showDialog<String>(
+            context: this.context!,
+            builder: (BuildContext context) => AlertDialog(
+              title: const Text('Ha ocurrido un error'),
+              content: Text('Ha ocurrido un error, Intentar mas tarde'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Entendido'),
+                ),
+              ],
+            ),
+          );
+        }
+      } else {
+        showDialog<String>(
+          context: this.context!,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Error'),
+            content: Text('No ha tomado ninguna imagen'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Entendido'),
+              ),
+            ],
+          ),
+        );
+      }
+    } else {
+      showDialog<String>(
+        context: this.context!,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Error'),
+          content: Text('Matricula de Vehiculo invalida (Placa) '),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Entendido'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }

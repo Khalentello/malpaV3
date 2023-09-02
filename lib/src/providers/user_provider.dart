@@ -20,7 +20,7 @@ class UserProvider {
   }
 
   Future<UserApp?> getByIdUserApp(String id) async {
-    debugPrint('### GETBYIDUSERAPP $id ###');
+    debugPrint('### El usuario es $id ###');
     DocumentSnapshot document = await _reference!.doc(id).get();
     UserApp? user;
     if (document.exists) {

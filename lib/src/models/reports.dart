@@ -1,35 +1,45 @@
 // To parse this JSON data, do
 //
-//     final userApp = userAppFromJson(jsonString);
+//     final NewReport = userAppFromJson(jsonString);
 
 import 'dart:convert';
 
-UserApp userAppFromJson(String str) => UserApp.fromJson(json.decode(str));
+NewReport NewReportFromJson(String str) => NewReport.fromJson(json.decode(str));
 
-String userAppToJson(UserApp data) => json.encode(data.toJson());
+String NewReportToJson(NewReport data) => json.encode(data.toJson());
 
-class UserApp {
+class NewReport {
   String reportId;
   String userId;
   String vehiclePlate;
-  String urlImageList;
+  double latitude;
+  double longitude;
+  List<dynamic> imagesUrl;
 
-  UserApp({
+  NewReport({
     required this.reportId,
     required this.userId,
     required this.vehiclePlate,
-    this.urlImageList = '',
+    required this.imagesUrl,
+    required this.latitude,
+    required this.longitude,
   });
 
-  factory UserApp.fromJson(Map<String, dynamic> json) => UserApp(
+  factory NewReport.fromJson(Map<String, dynamic> json) => NewReport(
         reportId: json["reportId"],
         userId: json["user"],
         vehiclePlate: json["vehiclePlate"],
+        imagesUrl: json['images'],
+        latitude: json['latitude'],
+        longitude: json['longitude'],
       );
 
   Map<String, dynamic> toJson() => {
         "reportId": reportId,
         "userId": userId,
         "vehiclePlate": vehiclePlate,
+        "images": imagesUrl,
+        "latitude": latitude,
+        "longitude": longitude,
       };
 }
