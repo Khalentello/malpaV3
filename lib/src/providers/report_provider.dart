@@ -52,7 +52,7 @@ class ReportProvider {
   Future<void> createReport(NewReport report) async {
     try {
       return await _collectionReference!
-          .doc(report.userId)
+          .doc(report.reportId)
           .set(report.toJson());
     } catch (e) {
       debugPrint('### ERROR EN Create Report  ###');

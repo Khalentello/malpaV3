@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -170,6 +171,9 @@ class ReportEventController {
 
   Future<void> uploadReport() async {
     String placa = placaCapture.text.trim();
+    DateTime timeNow = DateTime.now();
+    GeoPoint actualPosition =
+        new GeoPoint(_position!.latitude, _position!.longitude);
     if (placa.length == 6) {
       if (arrayImages.isNotEmpty) {
         String reportIdentifier =
@@ -184,8 +188,8 @@ class ReportEventController {
             userId: userId,
             vehiclePlate: placa,
             imagesUrl: imagesUrl,
-            latitude: _position!.latitude,
-            longitude: _position!.longitude,
+            dateTimeReport: timeNow,
+            location: actualPosition,
           );
           await _reportProvider!.createReport(report);
           showDialog<String>(
