@@ -6,7 +6,9 @@ import 'package:malpav3/src/providers/user_provider.dart';
 class RegisterController {
   BuildContext? context;
   final TextEditingController nameUser = TextEditingController();
+  final TextEditingController lastNameUser = TextEditingController();
   final TextEditingController phoneUser = TextEditingController();
+  final TextEditingController countryUser = TextEditingController();
   final TextEditingController emailUser = TextEditingController();
   final TextEditingController passwordUser = TextEditingController();
   final TextEditingController repeatPasswordUser = TextEditingController();

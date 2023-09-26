@@ -1,3 +1,4 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:malpav3/src/screens/register/register_controller.dart';
@@ -14,6 +15,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final RegisterController _controller = RegisterController();
+  String selectedCountryName = "País";
   @override
   void initState() {
     // TODO: implement initState
@@ -42,18 +44,30 @@ class _RegisterPageState extends State<RegisterPage> {
               children: [
                 _firstNameInput(),
                 _lastNameInput(),
+                _countryList(),
                 _phoneInput(),
                 _emailInput(),
                 _password1Input(),
+                _passwordConditions(),
                 _password2Input(),
                 _checkTermsConditions(),
                 Container(
                   width: double.infinity,
-                  margin: EdgeInsets.only(left: 17, right: 17, top: 34),
+                  margin: EdgeInsets.only(
+                    left: 17,
+                    right: 17,
+                    top: 34,
+                  ),
                   child: Row(
                     children: [
-                      Expanded(flex: 1, child: _btnGoBack()),
-                      Expanded(flex: 1, child: _btnRegisterUser()),
+                      Expanded(
+                        flex: 1,
+                        child: _btnGoBack(),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: _btnRegisterUser(),
+                      ),
                     ],
                   ),
                 )
@@ -90,13 +104,70 @@ class _RegisterPageState extends State<RegisterPage> {
           staticText: "Apellidos",
         ),
         TextInputField(
-          textEditingController: _controller.nameUser,
+          textEditingController: _controller.lastNameUser,
           hintText: "Ingresa tus apellidos",
           icon: 3,
           textInputType: TextInputType.name,
           marginBottom: 16,
           marginTop: 5,
         ),
+      ],
+    );
+  }
+
+  Widget _countryList() {
+    return Column(
+      children: [
+        StaticTextRegister(staticText: "País"),
+        Container(
+          margin: EdgeInsets.only(top: 5, bottom: 16),
+          width: double.infinity,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                elevation: 0,
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                backgroundColor: whiteColor,
+                textStyle: TextStyle(color: hintTextColor, fontSize: 15)),
+            onPressed: () {
+              showCountryPicker(
+                context: context,
+                favorite: <String>['CO'],
+                showPhoneCode: false,
+                onSelect: (Country country) {
+                  setState(() {
+                    selectedCountryName =
+                        '${country.flagEmoji} ${country.name} ';
+                  });
+                },
+                countryListTheme: CountryListThemeData(
+                  margin: EdgeInsets.only(top: 50),
+                  borderRadius: BorderRadius.zero,
+                  backgroundColor: whiteColor,
+                  searchTextStyle: TextStyle(
+                    color: blackColor,
+                    fontSize: 18,
+                  ),
+                  inputDecoration: InputDecoration(
+                    label: Text("Buscar"),
+                    labelStyle: TextStyle(color: blackColor),
+                    prefixIcon: const Icon(
+                      Icons.search,
+                      color: blackColor,
+                    ),
+                    focusedBorder: UnderlineInputBorder(),
+                  ),
+                ),
+              );
+            },
+            child: Text(
+              selectedCountryName,
+              style: selectedCountryName == "País"
+                  ? TextStyle(color: hintTextColor)
+                  : TextStyle(color: blackColor),
+            ),
+          ),
+        )
       ],
     );
   }
@@ -110,7 +181,6 @@ class _RegisterPageState extends State<RegisterPage> {
         TextInputField(
           textEditingController: _controller.phoneUser,
           hintText: "Numero de celular",
-          icon: 1,
           textInputType: TextInputType.phone,
           marginBottom: 16,
           marginTop: 5,
@@ -128,12 +198,40 @@ class _RegisterPageState extends State<RegisterPage> {
         TextInputField(
           textEditingController: _controller.emailUser,
           hintText: "Ingrese su correo electrónico",
-          icon: 1,
-          textInputType: TextInputType.phone,
+          textInputType: TextInputType.emailAddress,
           marginBottom: 16,
           marginTop: 5,
         ),
       ],
+    );
+  }
+
+  Widget _passwordConditions() {
+    String bullet = "\u2022 ";
+    return Container(
+      margin: EdgeInsets.only(bottom: 16),
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "$bullet La contraseña debe contener entre 8 - 20 caracteres",
+            style: TextStyle(fontSize: 12),
+          ),
+          Text(
+            "$bullet Debe contener al menos una letra minúscula",
+            style: TextStyle(fontSize: 12),
+          ),
+          Text(
+            "$bullet Debe contener al menos una letra mayúscula",
+            style: TextStyle(fontSize: 12),
+          ),
+          Text(
+            "$bullet Debe contener un número o un carácter especial",
+            style: TextStyle(fontSize: 12),
+          ),
+        ],
+      ),
     );
   }
 

@@ -21,7 +21,7 @@ class TextInputField extends StatelessWidget {
     required this.hintText,
     this.isPass = false,
     this.withIcon = false,
-    required this.icon,
+    this.icon = 1,
     required this.textInputType,
     this.textInputLength = 100,
     required this.marginBottom,
