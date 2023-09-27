@@ -136,6 +136,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 showPhoneCode: false,
                 onSelect: (Country country) {
                   setState(() {
+                    _controller.countryUser = country.name;
                     selectedCountryName =
                         '${country.flagEmoji} ${country.name} ';
                   });
@@ -206,35 +207,6 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _passwordConditions() {
-    String bullet = "\u2022 ";
-    return Container(
-      margin: EdgeInsets.only(bottom: 16),
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "$bullet La contraseña debe contener entre 8 - 20 caracteres",
-            style: TextStyle(fontSize: 12),
-          ),
-          Text(
-            "$bullet Debe contener al menos una letra minúscula",
-            style: TextStyle(fontSize: 12),
-          ),
-          Text(
-            "$bullet Debe contener al menos una letra mayúscula",
-            style: TextStyle(fontSize: 12),
-          ),
-          Text(
-            "$bullet Debe contener un número o un carácter especial",
-            style: TextStyle(fontSize: 12),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _password1Input() {
     return Column(
       children: [
@@ -251,6 +223,35 @@ class _RegisterPageState extends State<RegisterPage> {
           marginTop: 5,
         ),
       ],
+    );
+  }
+
+  Widget _passwordConditions() {
+    String bullet = "\u2022 ";
+    return Container(
+      margin: EdgeInsets.only(bottom: 16),
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "$bullet La contraseña debe contener entre 8 - 20 caracteres",
+            style: TextStyle(fontSize: 12, color: blackColor),
+          ),
+          Text(
+            "$bullet Debe contener al menos una letra minúscula",
+            style: TextStyle(fontSize: 12, color: blackColor),
+          ),
+          Text(
+            "$bullet Debe contener al menos una letra mayúscula",
+            style: TextStyle(fontSize: 12, color: blackColor),
+          ),
+          Text(
+            "$bullet Debe contener un número",
+            style: TextStyle(fontSize: 12, color: blackColor),
+          ),
+        ],
+      ),
     );
   }
 

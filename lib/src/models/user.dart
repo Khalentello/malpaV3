@@ -10,14 +10,18 @@ String userAppToJson(UserApp data) => json.encode(data.toJson());
 
 class UserApp {
   String id;
-  String user;
+  String name;
+  String lastName;
+  String country;
   String phone;
   String email;
   String password;
 
   UserApp({
     required this.id,
-    required this.user,
+    required this.name,
+    required this.lastName,
+    required this.country,
     required this.phone,
     required this.email,
     required this.password,
@@ -25,7 +29,9 @@ class UserApp {
 
   factory UserApp.fromJson(Map<String, dynamic> json) => UserApp(
         id: json["id"],
-        user: json["user"],
+        name: json["name"],
+        lastName: json["last name"],
+        country: json["country"],
         phone: json["phone"],
         email: json["email"],
         password: json["password"],
@@ -33,7 +39,9 @@ class UserApp {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "user": user,
+        "name": name,
+        "last name": lastName,
+        "country": country,
         "phone": phone,
         "email": email,
         "password": password,

@@ -7,7 +7,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:203648145173:android:5214ad7712461938607b1c",
+        "mobilesdk_app_id": "1:203648145173:android:9a3fec6626e65821607b1c",
         "android_client_info": {
           "package_name": "com.malpav3.malpav3"
         }
@@ -20,7 +20,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDAwKRr5We886G6odAVYXxD2ISbs6GIwEY"
+          "current_key": "AIzaSyAY-ACThblZFvmXmTT-uqK9pSuSm18QzJU"
         }
       ],
       "services": {
@@ -29,6 +29,13 @@
             {
               "client_id": "203648145173-jjhalk9multkaibbmksk98jh348p96md.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "203648145173-oumved1uik7p39a93cbbk5878e2mp2jr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.malpav3.malpav3"
+              }
             }
           ]
         }

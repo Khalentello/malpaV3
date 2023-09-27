@@ -5,8 +5,8 @@ import 'package:malpav3/firebase_options.dart';
 import 'package:malpav3/src/screens/login/login_page.dart';
 import 'package:malpav3/src/screens/register/register_page.dart';
 import 'package:malpav3/src/screens/report_event/report_event_page.dart';
-// import 'package:malpav3/src/take_picture/take_picture_page.dart';
 import 'package:malpav3/src/screens/tyc/tyc_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,22 +32,22 @@ class _MalpaState extends State<Malpa> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    debugPrint(user.toString());
     return MaterialApp(
       theme: ThemeData(
         appBarTheme: const AppBarTheme(elevation: 0),
       ),
       debugShowCheckedModeBanner: false,
       title: 'malpa',
-      initialRoute: 'login',
+      initialRoute: user != null ? 'report/event' : 'login',
       routes: {
         'login': (BuildContext context) => const LoginPage(),
         'register': (BuildContext context) => const RegisterPage(),
         'report/event': (BuildContext context) => const ReportEventPage(),
         'tyc': (BuildContext context) => const TyCPage(),
         'resetPassword': (BuildContext context) => const TyCPage(),
-        // 'takePicture': (BuildContext context) => const TakePicturePage(
-        //       camera: firstCamera,
-        //     ),
       },
     );
   }
